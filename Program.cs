@@ -82,21 +82,21 @@ namespace Had
                 for (int i = 0; i < body.Count; i++)
                 {
                     DrawPixel(body[i]);
-                    if (body[i].XPos == head.XPos && body[i].YPos == head.YPos)
+                    if (IsColliding(body[i], head))
                         gameover = true;
                 }
 
-                if (BerryCollision(berry, head))
+                if (IsColliding(berry, head))
                 {
                     score++;
                     berry = GenerateBerry(rand, ConsoleColor.Cyan);
                 }
-                if (BerryCollision(speedBerry, head))
+                if (IsColliding(speedBerry, head))
                 {
                     if (gamespeed>150) gamespeed -= 25;
                     speedBerry = GenerateBerry(rand, ConsoleColor.White);
                 }
-                if (BerryCollision(poisonBerry, head))
+                if (IsColliding(poisonBerry, head))
                 {
                     gameover = true;
                 }
@@ -117,7 +117,7 @@ namespace Had
             Environment.Exit(0);
         }
 
-        static private bool BerryCollision(Pixel berry, Pixel head) => berry.XPos == head.XPos && berry.YPos == head.YPos;
+        static private bool IsColliding(Pixel pixel1, Pixel pixel2) => pixel1.XPos == pixel2.XPos && pixel1.YPos == pixel2.YPos;
 
         static Direction? ReadMovement(Direction movement)
         {
