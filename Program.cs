@@ -12,10 +12,11 @@ namespace Had
 
             Random rand = new();
 
+            Console.WriteLine("Controls: Arrows or WASD");
             Console.WriteLine("Choose difficulty (Easy|Medium|Hard):");
-            var diff = Console.ReadLine();
+            var difficulty = Console.ReadLine();
             Console.Clear();
-            switch (diff?.ToLower())
+            switch (difficulty?.ToLower())
             {
                 case "e":
                 case "easy":
@@ -29,6 +30,7 @@ namespace Had
                 case "hard":
                 default:
                     Console.SetWindowSize(32, 16);
+                    gamespeed = 250;
                     break;
             }
 
@@ -49,9 +51,9 @@ namespace Had
                 DrawPixel(poisonBerry);
                 DrawPixel(speedBerry);
                 DrawScore(score);
-                var sw = Stopwatch.StartNew();
+                var stopwatch = Stopwatch.StartNew();
                 Direction lastMovement = currentMovement;
-                while (sw.ElapsedMilliseconds <= gamespeed)
+                while (stopwatch.ElapsedMilliseconds <= gamespeed)
                 {
                     currentMovement = ReadMovement(lastMovement)??currentMovement;
                 }
@@ -109,6 +111,10 @@ namespace Had
             }
 
             PrintEndScreen(score);
+
+            Console.ReadKey();
+            Console.Clear();
+            Environment.Exit(0);
         }
 
         static private bool BerryCollision(Pixel berry, Pixel head) => berry.XPos == head.XPos && berry.YPos == head.YPos;
@@ -119,19 +125,19 @@ namespace Had
             {
                 ConsoleKey key = Console.ReadKey(true).Key;
 
-                if (key == ConsoleKey.UpArrow && movement != Direction.Down)
+                if ((key == ConsoleKey.UpArrow || key == ConsoleKey.W) && movement != Direction.Down)
                 {
                     return Direction.Up;
                 }
-                else if (key == ConsoleKey.DownArrow && movement != Direction.Up)
+                else if ((key == ConsoleKey.DownArrow || key == ConsoleKey.S) && movement != Direction.Up)
                 {
                     return Direction.Down;
                 }
-                else if (key == ConsoleKey.LeftArrow && movement != Direction.Right)
+                else if ((key == ConsoleKey.LeftArrow || key == ConsoleKey.A) && movement != Direction.Right)
                 {
                     return Direction.Left;
                 }
-                else if (key == ConsoleKey.RightArrow && movement != Direction.Left)
+                else if ((key == ConsoleKey.RightArrow || key == ConsoleKey.D) && movement != Direction.Left)
                 {
                     return Direction.Right;
                 }
@@ -180,7 +186,6 @@ namespace Had
             Console.SetCursorPosition(2, Console.WindowHeight / 2 + 1);
             Console.WriteLine($"Game over, Score: {score - 5}");
             Console.SetCursorPosition(Console.WindowWidth / 5, Console.WindowHeight / 2 + 1);
-            Console.ReadKey();
         }
 
         struct Pixel(int xPos, int yPos, ConsoleColor color)
