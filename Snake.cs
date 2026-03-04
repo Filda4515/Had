@@ -1,4 +1,6 @@
-﻿namespace Had
+﻿using System.Xml.Linq;
+
+namespace Had
 {
     public class Snake
     {
@@ -11,7 +13,7 @@
             Body = [];
         }
 
-        public void Move(Direction direction)
+        public void Move(Direction direction, GameState state)
         {
             Body.Add(new Pixel(Head.XPos, Head.YPos, ConsoleColor.Green));
 
@@ -32,6 +34,12 @@
                     break;
             }
             Head = newHead;
+
+            if (Body.Count > state.Score)
+            {
+                Draw.Pixel(Body[0], ' ');
+                Body.RemoveAt(0);
+            }
         }
 
         public bool CheckWallCollision()

@@ -16,16 +16,16 @@
 
         public bool IsCollidingWith(Pixel other) => Position.IsCollidingWith(other);
 
-        public abstract void ApplyEffect(ref int score, ref int gameSpeed, ref bool gameOver, Random rand);
+        public abstract void ApplyEffect(GameState state, Random rand);
     }
 
     public class NormalBerry : Berry
     {
         public NormalBerry() : base(ConsoleColor.Cyan) { }
 
-        public override void ApplyEffect(ref int score, ref int gameSpeed, ref bool gameOver, Random rand)
+        public override void ApplyEffect(GameState state, Random rand)
         {
-            score++;
+            state.Score++;
             Generate(rand);
         }
     }
@@ -34,9 +34,9 @@
     {
         public SpeedBerry() : base(ConsoleColor.White) { }
 
-        public override void ApplyEffect(ref int score, ref int gameSpeed, ref bool gameOver, Random rand)
+        public override void ApplyEffect(GameState state, Random rand)
         {
-            if (gameSpeed > 150) gameSpeed -= 25;
+            if (state.GameSpeed > 150) state.GameSpeed -= 25;
             Generate(rand);
         }
     }
@@ -45,9 +45,9 @@
     {
         public PoisonBerry() : base(ConsoleColor.Magenta) { }
 
-        public override void ApplyEffect(ref int score, ref int gameSpeed, ref bool gameOver, Random rand)
+        public override void ApplyEffect(GameState state, Random rand)
         {
-            gameOver = true;
+            state.GameOver = true;
         }
     }
 }

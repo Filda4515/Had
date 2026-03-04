@@ -1,42 +1,15 @@
-using System.Diagnostics;
-using System.Xml.Linq;
-
-namespace Had
+﻿namespace Had
 {
     class Program
     {
         static void Main()
         {
-            var gamespeed = 500;
-            var score = 5;
-            var gameover = false;
-
+            GameState state = new(5, 500, false);
             Random rand = new();
 
-            Console.WriteLine("Controls: Arrows or WASD");
-            Console.WriteLine("Choose difficulty (Easy|Medium|Hard):");
-            var difficulty = Console.ReadLine();
-            Console.Clear();
-            switch (difficulty?.ToLower())
-            {
-                case "e":
-                case "easy":
-                    Console.SetWindowSize(64, 32);
-                    break;
-                case "m":
-                case "medium":
-                    Console.SetWindowSize(32, 16);
-                    break;
-                case "h":
-                case "hard":
-                default:
-                    Console.SetWindowSize(32, 16);
-                    gamespeed = 250;
-                    break;
-            }
+            Draw.IntroScreen(state.GameSpeed);
 
             Snake snake = new();
-
             List<Berry> berries =
             [
                 new NormalBerry(),
@@ -52,74 +25,38 @@ namespace Had
 
             Draw.Border();
 
-            while (!gameover)
+            while (!state.GameOver)
             {
                 snake.DrawSnake();
                 foreach (var berry in berries)
                 {
                     Draw.Pixel(berry.Position);
                 }
-                Draw.Score(score);
-                var stopwatch = Stopwatch.StartNew();
-                Direction lastMovement = currentMovement;
-                while (stopwatch.ElapsedMilliseconds <= gamespeed)
-                {
-                    currentMovement = ReadMovement(lastMovement) ?? currentMovement;
-                }
+                Draw.Score(state.Score);
 
-                snake.Move(currentMovement);
+                currentMovement = InputHandler.GetNextDirection(state.GameSpeed, currentMovement);
 
-                if (snake.Body.Count > score)
-                {
-                    Draw.Pixel(snake.Body[0], ' ');
-                    snake.Body.RemoveAt(0);
-                }
+                snake.Move(currentMovement, state);
 
                 if (snake.CheckWallCollision() || snake.CheckSelfCollision())
                 {
-                    gameover = true;
+                    state.GameOver = true;
                 }
 
                 foreach (var berry in berries)
                 {
                     if (berry.IsCollidingWith(snake.Head))
                     {
-                        berry.ApplyEffect(ref score, ref gamespeed, ref gameover, rand);
+                        berry.ApplyEffect(state, rand);
                     }
                 }
             }
 
-            Draw.EndScreen(score);
+            Draw.EndScreen(state.Score);
 
             Console.ReadKey();
             Console.Clear();
             Environment.Exit(0);
-        }
-
-        static Direction? ReadMovement(Direction movement)
-        {
-            if (Console.KeyAvailable)
-            {
-                ConsoleKey key = Console.ReadKey(true).Key;
-
-                if ((key == ConsoleKey.UpArrow || key == ConsoleKey.W) && movement != Direction.Down)
-                {
-                    return Direction.Up;
-                }
-                else if ((key == ConsoleKey.DownArrow || key == ConsoleKey.S) && movement != Direction.Up)
-                {
-                    return Direction.Down;
-                }
-                else if ((key == ConsoleKey.LeftArrow || key == ConsoleKey.A) && movement != Direction.Right)
-                {
-                    return Direction.Left;
-                }
-                else if ((key == ConsoleKey.RightArrow || key == ConsoleKey.D) && movement != Direction.Left)
-                {
-                    return Direction.Right;
-                }
-            }
-            return null;
         }
     }
 }
