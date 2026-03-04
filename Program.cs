@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace Had
@@ -49,7 +49,6 @@ namespace Had
             }
 
             var currentMovement = Direction.Right;
-            var body = new List<Pixel>();
 
             Draw.Border();
 
@@ -73,7 +72,7 @@ namespace Had
                 if (snake.Body.Count > score)
                 {
                     Draw.Pixel(snake.Body[0], ' ');
-                    body.RemoveAt(0);
+                    snake.Body.RemoveAt(0);
                 }
 
                 if (snake.CheckWallCollision() || snake.CheckSelfCollision())
