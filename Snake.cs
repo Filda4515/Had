@@ -15,7 +15,9 @@ namespace Had
 
         public void Move(Direction direction, GameState state)
         {
-            Body.Add(new Pixel(Head.XPos, Head.YPos, ConsoleColor.Green));
+            Pixel new_body = new(Head.XPos, Head.YPos, ConsoleColor.Green);
+            Body.Add(new_body);
+            Draw.Pixel(new_body);
 
             Pixel newHead = Head;
             switch (direction)
@@ -34,6 +36,7 @@ namespace Had
                     break;
             }
             Head = newHead;
+            Draw.Pixel(Head);
 
             if (Body.Count > state.Score)
             {
@@ -55,15 +58,6 @@ namespace Had
                 if (part.IsCollidingWith(Head)) return true;
             }
             return false;
-        }
-
-        public void DrawSnake()
-        {
-            Draw.Pixel(Head);
-            foreach (var part in Body)
-            {
-                Draw.Pixel(part);
-            }
         }
     }
 }

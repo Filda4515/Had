@@ -35,7 +35,7 @@
             Console.Title = $"Score: {score}";
         }
 
-        public static void IntroScreen(int gameSpeed)
+        public static void IntroScreen(GameState state)
         {
             Console.WriteLine("Controls: Arrows or WASD");
             Console.WriteLine("Choose difficulty (Easy|Medium|Hard):");
@@ -55,7 +55,7 @@
                 case "hard":
                 default:
                     Console.SetWindowSize(32, 16);
-                    gameSpeed = 250;
+                    state.GameSpeed = 250;
                     break;
             }
         }

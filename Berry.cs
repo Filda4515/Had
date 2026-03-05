@@ -27,6 +27,7 @@
         {
             state.Score++;
             Generate(rand);
+            Draw.Pixel(Position);
         }
     }
 
@@ -38,6 +39,7 @@
         {
             if (state.GameSpeed > 150) state.GameSpeed -= 25;
             Generate(rand);
+            Draw.Pixel(Position);
         }
     }
 

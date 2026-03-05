@@ -7,7 +7,7 @@
             GameState state = new(5, 500, false);
             Random rand = new();
 
-            Draw.IntroScreen(state.GameSpeed);
+            Draw.IntroScreen(state);
 
             Snake snake = new();
             List<Berry> berries =
@@ -24,14 +24,13 @@
             var currentMovement = Direction.Right;
 
             Draw.Border();
+            foreach (var berry in berries)
+            {
+                Draw.Pixel(berry.Position);
+            }
 
             while (!state.GameOver)
-            {
-                snake.DrawSnake();
-                foreach (var berry in berries)
-                {
-                    Draw.Pixel(berry.Position);
-                }
+            {   
                 Draw.Score(state.Score);
 
                 currentMovement = InputHandler.GetNextDirection(state.GameSpeed, currentMovement);
