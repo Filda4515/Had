@@ -24,9 +24,9 @@
             for (int i = 0; i < Console.WindowHeight; i++)
             {
                 Console.SetCursorPosition(0, i);
-                Console.Write("■");
+                Console.Write(character);
                 Console.SetCursorPosition(Console.WindowWidth - 1, i);
-                Console.Write("■");
+                Console.Write(character);
             }
         }
 

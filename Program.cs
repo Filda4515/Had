@@ -4,7 +4,10 @@
     {
         static void Main()
         {
-            GameState state = new(5, 500, false);
+            int score = 5;
+            int gameSpeed = 500;
+            bool gameOver = false;
+            GameState state = new(score, gameSpeed, gameOver);
             Random rand = new();
 
             Draw.IntroScreen(state);
